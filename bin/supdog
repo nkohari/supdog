@@ -1,0 +1,21 @@
+#!/usr/bin/env ./node_modules/.bin/coffee
+
+Client   = require '../src/Client'
+commands = require '../src/commands'
+
+if process.argv.length < 3
+  console.log "Usage: supdog command [arguments]"
+  process.exit(1)
+
+args = process.argv.slice(2)
+name = args.shift()
+
+client = new Client
+  apikey: process.env['DATADOG_API_KEY']
+  appkey: process.env['DATADOG_APPLICATION_KEY']
+
+unless commands[name]?
+  console.log "Unknown command #{name}"
+  process.exit(1)
+
+commands[name](client, args)
